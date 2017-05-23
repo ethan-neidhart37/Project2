@@ -2,8 +2,8 @@
 // Contains code to run files p1a.cpp and p1b.cpp
 
 #include <iostream>
-#include "p1a.cpp"
-#include "p1b.cpp"
+#include "p2a.cpp"
+#include "p2b.cpp"
 
 int main() {
 	// Run p1a.cpp/p1b.cpp
