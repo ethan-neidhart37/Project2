@@ -111,6 +111,42 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="p2a.cpp" />
+    <ClCompile Include="p2b.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="d_except.h" />
+    <ClInclude Include="d_matrix.h" />
+    <ClInclude Include="d_random.h" />
+    <ClInclude Include="knapsack.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="color\color.format" />
+    <None Include="color\input\color12-3.input" />
+    <None Include="color\input\color12-4.input" />
+    <None Include="color\input\color192-6.input" />
+    <None Include="color\input\color192-7.input" />
+    <None Include="color\input\color192-8.input" />
+    <None Include="color\input\color24-4.input" />
+    <None Include="color\input\color24-5.input" />
+    <None Include="color\input\color48-5.input" />
+    <None Include="color\input\color48-6.input" />
+    <None Include="color\input\color96-6.input" />
+    <None Include="color\input\color96-7.input" />
+    <None Include="knapsack\input\knapsack1024.input" />
+    <None Include="knapsack\input\knapsack12.input" />
+    <None Include="knapsack\input\knapsack128.input" />
+    <None Include="knapsack\input\knapsack16.input" />
+    <None Include="knapsack\input\knapsack20.input" />
+    <None Include="knapsack\input\knapsack256.input" />
+    <None Include="knapsack\input\knapsack28.input" />
+    <None Include="knapsack\input\knapsack32.input" />
+    <None Include="knapsack\input\knapsack48.input" />
+    <None Include="knapsack\input\knapsack512.input" />
+    <None Include="knapsack\input\knapsack64.input" />
+    <None Include="knapsack\input\knapsack8.input" />
+    <None Include="knapsack\knapsack.format" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

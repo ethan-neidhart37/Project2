@@ -14,4 +14,106 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="p2a.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="p2b.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="d_except.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="d_matrix.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="d_random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="knapsack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="color\color.format">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="color\input\color12-3.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="color\input\color12-4.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="color\input\color24-4.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="color\input\color24-5.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="color\input\color48-5.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="color\input\color48-6.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="color\input\color96-6.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="color\input\color96-7.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="color\input\color192-6.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="color\input\color192-7.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="color\input\color192-8.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="knapsack\knapsack.format">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="knapsack\input\knapsack8.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="knapsack\input\knapsack12.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="knapsack\input\knapsack16.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="knapsack\input\knapsack20.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="knapsack\input\knapsack28.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="knapsack\input\knapsack32.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="knapsack\input\knapsack48.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="knapsack\input\knapsack64.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="knapsack\input\knapsack128.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="knapsack\input\knapsack256.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="knapsack\input\knapsack512.input">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="knapsack\input\knapsack1024.input">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>
