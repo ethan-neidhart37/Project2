@@ -2,12 +2,12 @@
 // Contains code to run files p1a.cpp and p1b.cpp
 
 #include <iostream>
-#include "p2a.cpp"
-#include "p2b.cpp"
+#include "p2a.h"
+#include "p2b.h"
 
 int main() {
 	// Run p1a.cpp/p1b.cpp
-	
+
 	int num;
 	char select;
 	bool loopEnd = false;
@@ -41,7 +41,7 @@ int main() {
 			default: std::cout << "Please select correct input '[y/n]"; break;
 			}
 			std::cout << "\n";
-		} while (select != 'y' && select != 'n');		
+		} while (select != 'y' && select != 'n');
 	}
 
 	std::cin.get();

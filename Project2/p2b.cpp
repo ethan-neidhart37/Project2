@@ -2,43 +2,7 @@
 // Author: Ethan Neidhart, Kevin Do
 // Code to read graph instances from a file.  Uses the Boost Graph Library (BGL).
 
-#include <iostream>
-#include <limits.h>
-#include "d_except.h"
-#include <fstream>
-#include <time.h>
-
-#include <boost/graph/adjacency_list.hpp>
-
-#define LargeValue 99999999
-
-using namespace std;
-using namespace boost;
-
-int const NONE = -1;  // Used to represent a node that does not exist
-
-struct VertexProperties;
-struct EdgeProperties;
-
-typedef adjacency_list<vecS, vecS, bidirectionalS, VertexProperties, EdgeProperties> Graph;
-
-struct VertexProperties
-{
-	pair<int, int> cell; // maze cell (x,y) value
-	Graph::vertex_descriptor pred;
-	bool visited;
-	bool marked;
-	int weight;
-	int color;
-};
-
-// Create a struct to hold properties for each edge
-struct EdgeProperties
-{
-	int weight;
-	bool visited;
-	bool marked;
-};
+#include "p2b.h"
 
 void initializeGraph(Graph &g, ifstream &fin)
 // Initialize g using data from fin.
@@ -67,7 +31,7 @@ void cloneGraphColors(Graph &g, Graph &c)
 
 	for (Graph::vertex_iterator vItr = vItrRange.first; vItr != vItrRange.second; ++vItr)
 	{
-		c[*vItr].color= g[*vItr].color;
+		c[*vItr].color = g[*vItr].color;
 	}
 }
 
@@ -170,7 +134,7 @@ int exhaustiveColoring(Graph &g, int numColors, int t)
 	for (;;)
 	{
 		finished = increment(g, vItrRange.first, numColors, vItrRange.second);
-		
+
 		if (finished)
 			break;
 
@@ -230,7 +194,7 @@ int graphColoring()
 	cout << "Enter filename: ";
 	cin >> fileName;
 
-	string filePath =  fileFolder  + "input\\" + fileName + ".input";
+	string filePath = fileFolder + "input\\" + fileName + ".input";
 
 	fin.open((filePath).c_str());
 	if (!fin)

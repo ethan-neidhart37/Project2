@@ -2,17 +2,7 @@
 // Authors: Kevin Do, Ethan Neidhart
 // Project 1a: Solving knapsack using exhaustive search
 
-#include <iostream>
-#include <limits.h>
-#include <list>
-#include <fstream>
-#include <queue>
-#include <vector>
-#include <time.h>
-
-#include "d_except.h"
-#include "d_matrix.h"
-#include "knapsack.h"
+#include "p2a.h"
 
 using namespace std;
 
