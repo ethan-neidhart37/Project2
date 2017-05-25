@@ -191,6 +191,21 @@ vector<Graph::vertex_descriptor> getVertices(Graph &g)
 	return nodes;
 }
 
+int getDegree(Graph::vertex_descriptor &v, Graph &g)
+// Get the number of degrees in a graph.
+// Done by getting iterators pointing to the first and end of the list of nodes adjacent to node v.
+{
+	int degree = 0;
+
+	pair<Graph::adjacency_iterator, Graph::adjacency_iterator> vItrRange = adjacent_vertices(v, g);
+	for (Graph::adjacency_iterator vItr = vItrRange.first; vItr != vItrRange.second; ++vItr)
+	{
+		degree++;
+	}
+
+	return degree;
+}
+
 int graphColoring()
 // Exhaustively finds the most efficient graph coloring solution (in 10 minute limit)
 // Takes in an input file for graph, results in output file

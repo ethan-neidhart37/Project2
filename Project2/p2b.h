@@ -50,5 +50,6 @@ int exhaustiveColoring(Graph &g, int numColors, int t);
 void printSolution(Graph &g, int numConflicts, string filename, string folder);
 
 vector<Graph::vertex_descriptor> getVertices(Graph &g);
+int getDegree(Graph::vertex_descriptor &v, Graph &g);
 
 int graphColoring();
