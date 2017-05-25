@@ -175,6 +175,22 @@ void printSolution(Graph &g, int numConflicts, string filename, string folder)
 	myfile.close();
 }
 
+vector<Graph::vertex_descriptor> getVertices(Graph &g)
+// Get the number of vertices in a graph.
+{
+	vector<Graph::vertex_descriptor> nodes;
+
+	pair<Graph::vertex_iterator, Graph::vertex_iterator> vItrRange = vertices(g);
+
+	for (Graph::vertex_iterator vItr = vItrRange.first; vItr != vItrRange.second; ++vItr)
+	{
+		g[*vItr].color = -1;
+		nodes.push_back(*vItr);
+	}
+
+	return nodes;
+}
+
 int graphColoring()
 // Exhaustively finds the most efficient graph coloring solution (in 10 minute limit)
 // Takes in an input file for graph, results in output file
