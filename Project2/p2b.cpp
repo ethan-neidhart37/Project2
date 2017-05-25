@@ -193,7 +193,6 @@ vector<Graph::vertex_descriptor> getVertices(Graph &g)
 
 int getDegree(Graph::vertex_descriptor &v, Graph &g)
 // Get the number of degrees in a graph.
-// Done by getting iterators pointing to the first and end of the list of nodes adjacent to node v.
 {
 	int degree = 0;
 
@@ -204,6 +203,46 @@ int getDegree(Graph::vertex_descriptor &v, Graph &g)
 	}
 
 	return degree;
+}
+
+void setColor(int color, Graph::vertex_descriptor &v, Graph &g)
+// Set a color to graph.
+{
+	g[v].color = color;
+}
+
+pair<int, int> getBestColor(int colorSet, Graph::vertex_descriptor &v, Graph &g)
+// Return best color pair from a set of colors.
+{
+	vector<int> colorConflicts(colorSet, 0);
+	int color = -1;
+
+	pair<Graph::adjacency_iterator, Graph::adjacency_iterator> vItrRange = adjacent_vertices(v, g);
+
+	for (Graph::adjacency_iterator vItr = vItrRange.first; vItr != vItrRange.second; ++vItr)
+	{
+		color = g[*vItr].color;
+		if (color >= 0 && color < colorSet)
+		{
+			colorConflicts[color]++;
+		}
+	}
+
+	color = -1;
+
+	for (int i = 0; colorConflicts.size(); i++)
+	{
+		if (color == -1)
+		{
+			color = i;
+		}
+		else if (colorConflicts[i] < colorConflicts[color])
+		{
+			color = i;
+		}
+	}
+
+	return pair<int, int>(color, colorConflicts[color]);
 }
 
 int graphColoring()
