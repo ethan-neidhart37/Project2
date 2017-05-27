@@ -1,6 +1,6 @@
 // File: p2a.cpp
 // Authors: Kevin Do, Ethan Neidhart
-// Project 2a: Solving knapsack using greedy search
+// Project 2a: Solving knapsack using greedy algorithm
 
 #include "p2a.h"
 
@@ -72,6 +72,7 @@ void greedyKnapsack(knapsack &k)
 }
 
 void knapsackOutput(knapsack & k)
+// Writes the results of the algorithm to an output file
 {
 	string fileName = "knapsack/output/knapsack" + to_string(k.getNumObjects()) + ".output";
 
@@ -103,6 +104,7 @@ void knapsackOutput(knapsack & k)
 }
 
 void knapsackRun()
+// Runs an algorithm to solve the knapsack problem
 {
 	ifstream fin;
 	string fileName;
@@ -112,6 +114,45 @@ void knapsackRun()
 
 	// fileName = "knapsack/input/knapsack16.input";
 
+	cout << "Enter filename" << endl;
+	cin >> fileName;
+	string filePath = "knapsack/input/" + fileName + ".input";
+
+	fin.open(filePath.c_str());
+	if (!fin)
+	{
+		cerr << "Cannot open " << fileName << endl;
+		exit(1);
+	}
+
+	try
+	{
+		knapsack k(fin);
+
+		//exhaustiveKnapsack(k, 600);
+		greedyKnapsack(k);
+
+		// Write solution to output file
+		knapsackOutput(k);
+
+		cout << endl << "Best solution" << endl;
+		k.printSolution();
+	}
+
+	catch (indexRangeError &ex)
+	{
+		cout << ex.what() << endl; exit(1);
+	}
+	catch (rangeError &ex)
+	{
+		cout << ex.what() << endl; exit(1);
+	}
+
+	fin.close();
+
+	// loop input all files
+
+	/*
 	vector<string> s;
 	s.push_back("knapsack/input/knapsack8.input");
 	s.push_back("knapsack/input/knapsack12.input");
@@ -168,4 +209,5 @@ void knapsackRun()
 
 		fin.close();
 	}
+	*/
 }
