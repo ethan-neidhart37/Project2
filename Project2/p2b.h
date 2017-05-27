@@ -52,6 +52,7 @@ void printSolution(Graph &g, int numConflicts, string filename, string folder);
 vector<Graph::vertex_descriptor> getVertices(Graph &g);
 int getDegree(Graph::vertex_descriptor &v, Graph &g);
 void setColor(int color, Graph::vertex_descriptor &v, Graph &g);
-pair<int, int> getBestColor(int colorSet, Graph::vertex_descriptor &v, Graph &g);
+int getBestColor(int colorSet, Graph::vertex_descriptor &v, Graph &g);
+int greedyColor(Graph &g, int colorSet);
 
 int graphColoring();

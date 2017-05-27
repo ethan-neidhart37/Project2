@@ -196,13 +196,46 @@ int getDegree(Graph::vertex_descriptor &v, Graph &g)
 {
 	int degree = 0;
 
-	pair<Graph::adjacency_iterator, Graph::adjacency_iterator> vItrRange = adjacent_vertices(v, g);
-	for (Graph::adjacency_iterator vItr = vItrRange.first; vItr != vItrRange.second; ++vItr)
+	Graph::vertex_descriptor targetNode;
+	Graph::vertex_descriptor sourceNode;
+	pair<Graph::edge_iterator, Graph::edge_iterator> eItrRange = edges(g);
+
+	// Loop through graph's edges
+	for (Graph::edge_iterator eItr = eItrRange.first; eItr != eItrRange.second; ++eItr)
 	{
-		degree++;
+		targetNode = target(*eItr, g);
+		sourceNode = source(*eItr, g);
+
+		if (targetNode == v || sourceNode == v)
+		{
+			degree++;
+		}
 	}
 
 	return degree;
+}
+
+int getConflict(Graph &g)
+// Same implementation as getDegree but searching for conflicts
+{
+	int conflict = 0;
+
+	Graph::vertex_descriptor targetNode;
+	Graph::vertex_descriptor sourceNode;
+	pair<Graph::edge_iterator, Graph::edge_iterator> eItrRange = edges(g);
+
+	for (Graph::edge_iterator eItr = eItrRange.first; eItr != eItrRange.second; ++eItr)
+	{
+		targetNode = target(*eItr, g);
+		sourceNode = source(*eItr, g);
+
+		if (g[targetNode].color == g[sourceNode].color)
+		{
+			conflict++;
+		}
+	}
+
+	return conflict;
 }
 
 void setColor(int color, Graph::vertex_descriptor &v, Graph &g)
@@ -211,38 +244,141 @@ void setColor(int color, Graph::vertex_descriptor &v, Graph &g)
 	g[v].color = color;
 }
 
-pair<int, int> getBestColor(int colorSet, Graph::vertex_descriptor &v, Graph &g)
+int getBestColor(int colorSet, Graph::vertex_descriptor &v, Graph &g)
 // Return best color pair from a set of colors.
 {
-	vector<int> colorConflicts(colorSet, 0);
+int color = 1;
+
+Graph::vertex_descriptor targetNode;
+Graph::vertex_descriptor sourceNode;
+pair<Graph::edge_iterator, Graph::edge_iterator> eItrRange = edges(g);
+
+for (Graph::edge_iterator eItr = eItrRange.first; eItr != eItrRange.second; ++eItr)
+{
+	targetNode = target(*eItr, g);
+	sourceNode = source(*eItr, g);
+
+	if (targetNode == v)
+	{
+		if (g[sourceNode].color == g[v].color)
+		{
+			color++;
+			if (color == colorSet)
+			{
+				return 0;
+			}
+		}
+	}
+
+	else
+	{
+		if (sourceNode == v)
+		{
+			if (g[targetNode].color == g[v].color)
+			{
+				color++;
+				if (color == colorSet)
+				{
+					return 0;
+				}
+			}
+		}
+	}
+}
+
+return color;
+}
+
+int partition(vector<Graph::vertex_descriptor>&a, Graph &g, int left, int right)
+// Graph from highest to lowest priority using partition with recursion
+{
+	int i = left, j = right;
+	Graph::vertex_descriptor temp;
+	Graph::vertex_descriptor pivot = a.at((left + right) / 2);
+
+	// Partition
+	while (i <= j)
+	{
+		// Less than pivot, move
+		while (getDegree(a.at(j), g) >= getDegree(pivot, g) && i < pivot)
+		{
+			i++;
+		}
+
+		// More than pivot, move
+		while (getDegree(a.at(j), g) < getDegree(pivot, g))
+		{
+			j--;
+		}
+
+		//check pivot
+		if (i <= j)
+		{
+			temp = a.at(i);
+			a.at(i) = a.at(j);
+			a.at(j) = temp;
+			i++;
+			j--;
+		}
+	}
+
+	// Recurse parition on left
+	if (left < j)
+	{
+		partition(a, g, left, j);
+	}
+
+	// Recurse partition on right
+	if (i < right)
+	{
+		partition(a, g, i, right);
+	}
+}
+
+int quicksortColor(Graph &g, vector<Graph::vertex_descriptor>& vertexVector)
+{
+	int i = 0;
+	int j = 1;
+	int min = 0;
+	int select = 0;
+	vector<Graph::vertex_descriptor> newVertex;
+	vector<bool> slectVertex(vertexVector.size(), false);
+
+	while (i < vertexVector.size()) - 1)
+	{
+		min = getDegree(vertexVector.at(i), g);
+		location = i;
+		for (int j = 0; j < vertexVector.size() - 1; j++)
+		{
+			if (!vertexUsed.at(j) && min > getDegree(vertexVector.at(j), g))
+			{
+				min = getDegree(vertexVector.at(j), g);
+				location = j;
+			}
+		}
+
+		selectVertex.at(select) = true;
+		newVertex.push_back(vertexVector.at(select));
+
+		i++;
+	}
+
+	return newVertex;
+}
+
+int greedyColor(Graph &g, int colorSet)
+{
+	//cout << endl << "Performing Greedy";
 	int color = -1;
+	vector<Graph::vertex_descriptor> vertexVector = getVertices(g);
 
-	pair<Graph::adjacency_iterator, Graph::adjacency_iterator> vItrRange = adjacent_vertices(v, g);
-
-	for (Graph::adjacency_iterator vItr = vItrRange.first; vItr != vItrRange.second; ++vItr)
+	for (int i = 0; i < vertexVector.size(); i++)
 	{
-		color = g[*vItr].color;
-		if (color >= 0 && color < colorSet)
-		{
-			colorConflicts[color]++;
-		}
+		color = getBestColor(colorSet, vertexVector[i], g);
+		setColor(color, vertexVector[i], g);
 	}
 
-	color = -1;
-
-	for (int i = 0; colorConflicts.size(); i++)
-	{
-		if (color == -1)
-		{
-			color = i;
-		}
-		else if (colorConflicts[i] < colorConflicts[color])
-		{
-			color = i;
-		}
-	}
-
-	return pair<int, int>(color, colorConflicts[color]);
+	return getConflict(g);
 }
 
 int graphColoring()
