@@ -1,0 +1,11 @@
+When running our implementation of the greedy knapsack algorithm, we found
+that it ran much faster than the exhaustive version, never taking more than
+a 1-2 seconds. When printing was turned off, it ran almost instantaneously for
+all instances given. However, it did not always give the optimal solution. We
+found that for instances under a size of 48, the exhaustive algorithm found
+equal or better solutions. Despite this, the greedy algorithm actually performs
+better than the exhaustive algorithm for sizes greater than or equal to 48,
+because the exhaustive algorithm is limited to a 10 minute runtime, which is
+too short to consider enough possibilities. In short, the greedy algorithm runs
+much faster than the exhaustive algorithm, is less accurate for small sets, and
+is more accurate for large sets.
