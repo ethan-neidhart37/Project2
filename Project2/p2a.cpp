@@ -1,78 +1,60 @@
-// File: p1a.cpp
+// File: p2a.cpp
 // Authors: Kevin Do, Ethan Neidhart
-// Project 1a: Solving knapsack using exhaustive search
+// Project 2a: Solving knapsack using greedy search
 
 #include "p2a.h"
 
 using namespace std;
 
 float getPriority(knapsack &k, int i)
+// Determine priority of an item by its "density" (value/cost)
 {
 	return (float)k.getValue(i) / (float)k.getCost(i);
 }
 
-void partition(knapsack &k, int p, int r, vector<int> &items)
-// Helper function for quicksort
-// Puts all items with greater priority than pivot to left of pivot
-// Puts all items with less priority than pivot to right of pivot
+int partition(knapsack &k, vector<int> &items, int left, int right, int pivot)
+// Put every item with a higher priority than the pivot to the left
+// Put every item with a lower priority than the pivot to the right
 {
-	if (p <= r)
-		return;
-
-	int pivot = items[r];
-	int temp;
-	int i = p - 1;
-
-	for (int j = p; j < r; j++)
+	for (int i = left; i < right; i++)
 	{
-		if (getPriority(k, items[j]) >= getPriority(k, pivot))
+		if (getPriority(k, items[i]) >= getPriority(k, pivot))
 		{
-			i++;
-
-			//Exchange values at locations i and j
-			temp = items[i];
-			items[i] = items[j];
-			items[j] = temp;
+			swap(items[i], items[left]);
+			left++;
 		}
 	}
-
-	//Exchange pivot with value at i + 1 so it is in sorted position
-	temp = items[i + 1];
-	items[i + 1] = items[r];
-	items[r] = temp;
-
-	//Partition the list before the pivot
-	partition(k, p, i, items);
-
-	//Partition the list after the pivot
-	partition(k, i + 2, r, items);
+	return left - 1;
 }
 
-void quicksortKnapsack(knapsack &k, vector<int> &items)
+void quicksortKnapsack(knapsack &k, vector<int> &items, int left, int right)
+// Sorting items from highest to lowest priority using partition
 {
-	partition(k, 0, k.getNumObjects() - 1, items);
+	//partition(k, 0, k.getNumObjects() - 1, items);
+	if (left >= right)
+		return;
+
+	int middle = left + (right - left) / 2;
+	swap(items[middle], items[left]);
+	int midpoint = partition(k, items, left + 1, right, items[left]);
+	swap(items[left], items[midpoint]);
+	quicksortKnapsack(k, items, left, midpoint);
+	quicksortKnapsack(k, items, midpoint + 1, right);
 }
 
 void greedyKnapsack(knapsack &k)
+// Greedy algorithm to solve knapsack problem by grabbing highest priority items that will fit
 {
 	int size = k.getNumObjects();
 	int limit = k.getCostLimit();
 	int cost = 0;
 
-	vector <int> items(size, 0);
+	vector<int> items(size, 0);
 	for (int i = 0; i < size; i++)
 		items[i] = i;
 
-	quicksortKnapsack(k, items);
+	quicksortKnapsack(k, items, 0, items.size());
 	// The first item in this list now contains the item number of the highest priority knapsack item
-
-	//DEBUGGING: PRINT
-	cout << "items" << endl;
-	for (int i = 0; i < items.size(); i++)
-	{
-		cout << items[i] << "\t" << k.getValue(items[i]) << "\t" << k.getCost(items[i]) << "\t" << getPriority(k, items[i]) << endl;
-	}
-	cout << endl;
 
 	for (int i = 0; i < size; i++)
 	{
@@ -86,60 +68,6 @@ void greedyKnapsack(knapsack &k)
 
 		if (cost == limit)
 			return;
-	}
-}
-
-void exhaustiveKnapsack(knapsack &k, int t)
-{
-	clock_t startTime;
-	clock_t currentTime;
-	startTime = clock();
-	float diff; //time difference
-	float duration = 0;
-	bool foundNode = false; //found a position
-	bool endOfKnapsackSets = false;
-	vector <bool> selectedObjs(k.getNumObjects(), false);
-	int score = 0;
-	int i;
-
-	while (t > duration && !endOfKnapsackSets)
-	{
-		// Display
-		//cout << "knapsack" << k.getNumObjects() << ".input - " << "duration: " << duration << "s" << endl;
-
-		if (score < k.getValue() && k.getCost() <= k.getCostLimit())
-		{
-			score = k.getValue();
-			selectedObjs = k.getSelected();
-		}
-
-		// Reset
-		foundNode = false;
-		i = 0;
-
-		while (!foundNode)
-		{
-			if (k.isSelected(i))
-			{
-				k.unSelect(i);
-				if (i == k.getNumObjects() - 1) { endOfKnapsackSets = true; }
-				else { i++; }
-			}
-			else
-			{
-				k.select(i);
-				foundNode = true;
-			}
-		}
-		currentTime = clock();
-		diff = (float)currentTime - (float)startTime;
-		duration = diff / CLOCKS_PER_SEC;
-	}
-
-	for (int i = 0; i < selectedObjs.size(); i++)
-	{
-		if (selectedObjs[i]) { k.select(i); }
-		else { k.unSelect(i); }
 	}
 }
 
