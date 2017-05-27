@@ -1,66 +1,78 @@
-// File: p1a.cpp
+// File: p2a.cpp
 // Authors: Kevin Do, Ethan Neidhart
-// Project 1a: Solving knapsack using exhaustive search
+// Project 2a: Solving knapsack using greedy algorithm
 
 #include "p2a.h"
 
 using namespace std;
 
-void exhaustiveKnapsack(knapsack &k, int t)
+float getPriority(knapsack &k, int i)
+// Determine priority of an item by its "density" (value/cost)
 {
-	clock_t startTime;
-	clock_t currentTime;
-	startTime = clock();
-	float diff; //time difference
-	float duration = 0;
-	bool foundNode = false; //found a position
-	bool endOfKnapsackSets = false;
-	vector <bool> selectedObjs(k.getNumObjects(), false);
-	int score = 0;
-	int i;
+	return (float)k.getValue(i) / (float)k.getCost(i);
+}
 
-	while (t > duration && !endOfKnapsackSets)
+int partition(knapsack &k, vector<int> &items, int left, int right, int pivot)
+// Put every item with a higher priority than the pivot to the left
+// Put every item with a lower priority than the pivot to the right
+{
+	for (int i = left; i < right; i++)
 	{
-		// Display
-		//cout << "knapsack" << k.getNumObjects() << ".input - " << "duration: " << duration << "s" << endl;
-
-		if (score < k.getValue() && k.getCost() <= k.getCostLimit())
+		if (getPriority(k, items[i]) >= getPriority(k, pivot))
 		{
-			score = k.getValue();
-			selectedObjs = k.getSelected();
+			swap(items[i], items[left]);
+			left++;
 		}
-
-		// Reset
-		foundNode = false;
-		i = 0;
-
-		while (!foundNode)
-		{
-			if (k.isSelected(i))
-			{
-				k.unSelect(i);
-				if (i == k.getNumObjects() - 1) { endOfKnapsackSets = true; }
-				else { i++; }
-			}
-			else
-			{
-				k.select(i);
-				foundNode = true;
-			}
-		}
-		currentTime = clock();
-		diff = (float)currentTime - (float)startTime;
-		duration = diff / CLOCKS_PER_SEC;
 	}
+	return left - 1;
+}
 
-	for (int i = 0; i < selectedObjs.size(); i++)
+void quicksortKnapsack(knapsack &k, vector<int> &items, int left, int right)
+// Sorting items from highest to lowest priority using partition
+{
+	//partition(k, 0, k.getNumObjects() - 1, items);
+	if (left >= right)
+		return;
+
+	int middle = left + (right - left) / 2;
+	swap(items[middle], items[left]);
+	int midpoint = partition(k, items, left + 1, right, items[left]);
+	swap(items[left], items[midpoint]);
+	quicksortKnapsack(k, items, left, midpoint);
+	quicksortKnapsack(k, items, midpoint + 1, right);
+}
+
+void greedyKnapsack(knapsack &k)
+// Greedy algorithm to solve knapsack problem by grabbing highest priority items that will fit
+{
+	int size = k.getNumObjects();
+	int limit = k.getCostLimit();
+	int cost = 0;
+
+	vector<int> items(size, 0);
+	for (int i = 0; i < size; i++)
+		items[i] = i;
+
+	quicksortKnapsack(k, items, 0, items.size());
+	// The first item in this list now contains the item number of the highest priority knapsack item
+
+	for (int i = 0; i < size; i++)
 	{
-		if (selectedObjs[i]) { k.select(i); }
-		else { k.unSelect(i); }
+		int item = items[i];
+
+		if (cost + k.getCost(item) <= limit)
+		{
+			k.select(item);
+			cost += k.getCost(item);
+		}
+
+		if (cost == limit)
+			return;
 	}
 }
 
 void knapsackOutput(knapsack & k)
+// Writes the results of the algorithm to an output file
 {
 	string fileName = "knapsack/output/knapsack" + to_string(k.getNumObjects()) + ".output";
 
@@ -92,6 +104,7 @@ void knapsackOutput(knapsack & k)
 }
 
 void knapsackRun()
+// Runs an algorithm to solve the knapsack problem
 {
 	ifstream fin;
 	string fileName;
@@ -101,6 +114,45 @@ void knapsackRun()
 
 	// fileName = "knapsack/input/knapsack16.input";
 
+	cout << "Enter filename" << endl;
+	cin >> fileName;
+	string filePath = "knapsack/input/" + fileName + ".input";
+
+	fin.open(filePath.c_str());
+	if (!fin)
+	{
+		cerr << "Cannot open " << fileName << endl;
+		exit(1);
+	}
+
+	try
+	{
+		knapsack k(fin);
+
+		//exhaustiveKnapsack(k, 600);
+		greedyKnapsack(k);
+
+		// Write solution to output file
+		knapsackOutput(k);
+
+		cout << endl << "Best solution" << endl;
+		k.printSolution();
+	}
+
+	catch (indexRangeError &ex)
+	{
+		cout << ex.what() << endl; exit(1);
+	}
+	catch (rangeError &ex)
+	{
+		cout << ex.what() << endl; exit(1);
+	}
+
+	fin.close();
+
+	// loop input all files
+
+	/*
 	vector<string> s;
 	s.push_back("knapsack/input/knapsack8.input");
 	s.push_back("knapsack/input/knapsack12.input");
@@ -133,7 +185,8 @@ void knapsackRun()
 
 			knapsack k(fin);
 
-			exhaustiveKnapsack(k, 600);
+			//exhaustiveKnapsack(k, 600);
+			greedyKnapsack(k);
 
 			// Write solution to output file
 			knapsackOutput(k);
@@ -142,7 +195,7 @@ void knapsackRun()
 			k.printSolution();
 
 			// Pause to view results
-			//system("PAUSE");
+			system("PAUSE");
 		}
 
 		catch (indexRangeError &ex)
@@ -156,4 +209,5 @@ void knapsackRun()
 
 		fin.close();
 	}
+	*/
 }
