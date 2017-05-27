@@ -50,11 +50,6 @@ void partition(knapsack &k, int p, int r, vector<int> &items)
 
 void quicksortKnapsack(knapsack &k, vector<int> &items)
 {
-	vector<int> items(k.getNumObjects(), 0);
-
-	for (int i = 0; i < k.getNumObjects(); i++)
-		items[i] = i;
-
 	partition(k, 0, k.getNumObjects() - 1, items);
 }
 
@@ -70,6 +65,14 @@ void greedyKnapsack(knapsack &k)
 
 	quicksortKnapsack(k, items);
 	// The first item in this list now contains the item number of the highest priority knapsack item
+
+	//DEBUGGING: PRINT
+	cout << "items" << endl;
+	for (int i = 0; i < items.size(); i++)
+	{
+		cout << items[i] << "\t" << k.getValue(items[i]) << "\t" << k.getCost(items[i]) << "\t" << getPriority(k, items[i]) << endl;
+	}
+	cout << endl;
 
 	for (int i = 0; i < size; i++)
 	{
