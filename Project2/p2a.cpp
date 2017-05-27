@@ -6,6 +6,86 @@
 
 using namespace std;
 
+float getPriority(knapsack &k, int i)
+{
+	return (float)k.getValue(i) / (float)k.getCost(i);
+}
+
+void partition(knapsack &k, int p, int r, vector<int> &items)
+// Helper function for quicksort
+// Puts all items with greater priority than pivot to left of pivot
+// Puts all items with less priority than pivot to right of pivot
+{
+	if (p <= r)
+		return;
+
+	int pivot = items[r];
+	int temp;
+	int i = p - 1;
+
+	for (int j = p; j < r; j++)
+	{
+		if (getPriority(k, items[j]) >= getPriority(k, pivot))
+		{
+			i++;
+
+			//Exchange values at locations i and j
+			temp = items[i];
+			items[i] = items[j];
+			items[j] = temp;
+		}
+	}
+
+	//Exchange pivot with value at i + 1 so it is in sorted position
+	temp = items[i + 1];
+	items[i + 1] = items[r];
+	items[r] = temp;
+
+	//Partition the list before the pivot
+	partition(k, p, i, items);
+
+	//Partition the list after the pivot
+	partition(k, i + 2, r, items);
+}
+
+void quicksortKnapsack(knapsack &k, vector<int> &items)
+{
+	vector<int> items(k.getNumObjects(), 0);
+
+	for (int i = 0; i < k.getNumObjects(); i++)
+		items[i] = i;
+
+	partition(k, 0, k.getNumObjects() - 1, items);
+}
+
+void greedyKnapsack(knapsack &k)
+{
+	int size = k.getNumObjects();
+	int limit = k.getCostLimit();
+	int cost = 0;
+
+	vector <int> items(size, 0);
+	for (int i = 0; i < size; i++)
+		items[i] = i;
+
+	quicksortKnapsack(k, items);
+	// The first item in this list now contains the item number of the highest priority knapsack item
+
+	for (int i = 0; i < size; i++)
+	{
+		int item = items[i];
+
+		if (cost + k.getCost(item) <= limit)
+		{
+			k.select(item);
+			cost += k.getCost(item);
+		}
+
+		if (cost == limit)
+			return;
+	}
+}
+
 void exhaustiveKnapsack(knapsack &k, int t)
 {
 	clock_t startTime;
@@ -133,7 +213,8 @@ void knapsackRun()
 
 			knapsack k(fin);
 
-			exhaustiveKnapsack(k, 600);
+			//exhaustiveKnapsack(k, 600);
+			greedyKnapsack(k);
 
 			// Write solution to output file
 			knapsackOutput(k);
@@ -142,7 +223,7 @@ void knapsackRun()
 			k.printSolution();
 
 			// Pause to view results
-			//system("PAUSE");
+			system("PAUSE");
 		}
 
 		catch (indexRangeError &ex)
