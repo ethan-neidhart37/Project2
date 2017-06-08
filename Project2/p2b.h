@@ -48,4 +48,11 @@ int checkConflicts(Graph &g);
 bool increment(Graph &g, Graph::vertex_iterator vItr, int numColors, Graph::vertex_iterator vEnd);
 int exhaustiveColoring(Graph &g, int numColors, int t);
 void printSolution(Graph &g, int numConflicts, string filename, string folder);
+
+vector<Graph::vertex_descriptor> getVertices(Graph &g);
+int getDegree(Graph::vertex_descriptor &v, Graph &g);
+void setColor(int color, Graph::vertex_descriptor &v, Graph &g);
+int getBestColor(int colorSet, Graph::vertex_descriptor &v, Graph &g);
+int greedyColor(Graph &g, int colorSet);
+
 int graphColoring();
