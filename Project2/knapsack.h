@@ -18,11 +18,13 @@ public:
 	int getValue() const;
 	int getNumObjects() const;
 	int getCostLimit() const;
+	float getPriority(int) const;
 	void printSolution();
 	void select(int);
 	void unSelect(int);
 	bool isSelected(int) const;
 	vector<bool> getSelected();
+	vector<int> sort();
 
 private:
 	int numObjects;
@@ -32,4 +34,6 @@ private:
 	vector<bool> selected;
 	int totalValue;
 	int totalCost;
+	int partition(vector<int> &items, int left, int right, int pivot);
+	void quicksort(vector<int> &items, int left, int right);
 };

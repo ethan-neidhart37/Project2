@@ -62,7 +62,6 @@ int knapsack::getCostLimit() const
 	return costLimit;
 }
 
-
 int knapsack::getValue(int i) const
 // Return the value of the ith object.
 {
@@ -91,6 +90,12 @@ int knapsack::getValue() const
 // Return the value of the selected objects.
 {
 	return totalValue;
+}
+
+float knapsack::getPriority(int i) const
+// Determine priority of an item by its "density" (value/cost)
+{
+	return (float)value[i] / (float)cost[i];
 }
 
 ostream &operator<<(ostream &ostr, const knapsack &k)
@@ -172,6 +177,37 @@ void knapsack::unSelect(int i)
 	}
 }
 
+int knapsack::partition(vector<int> &items, int left, int right, int pivot)
+// Helper for quicksort
+// Put every item with a higher priority than the pivot to the left
+// Put every item with a lower priority than the pivot to the right
+{
+	for (int i = left; i < right; i++)
+	{
+		if (getPriority(items[i]) >= getPriority(pivot))
+		{
+			swap(items[i], items[left]);
+			left++;
+		}
+	}
+	return left - 1;
+}
+
+void knapsack::quicksort(vector<int> &items, int left, int right)
+// Sorting items from highest to lowest priority using partition and recursion
+{
+	//partition(k, 0, k.getNumObjects() - 1, items);
+	if (left >= right)
+		return;
+
+	int middle = left + (right - left) / 2;
+	swap(items[middle], items[left]);
+	int midpoint = partition(items, left + 1, right, items[left]);
+	swap(items[left], items[midpoint]);
+	quicksort(items, left, midpoint);
+	quicksort(items, midpoint + 1, right);
+}
+
 bool knapsack::isSelected(int i) const
 // Return true if object i is currently selected, and false otherwise.
 {
@@ -184,4 +220,14 @@ bool knapsack::isSelected(int i) const
 vector<bool> knapsack::getSelected()
 {
 	return selected;
+}
+
+vector<int> knapsack::sort()
+// Public function to return a vector of item numbers, sorted via quicksort
+{
+	vector<int> items(numObjects, 0);
+	for (int i = 0; i < numObjects; i++)
+		items[i] = i;
+
+	quicksort(items, 0, numObjects);
 }

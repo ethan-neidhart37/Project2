@@ -6,57 +6,16 @@
 
 using namespace std;
 
-float getPriority(knapsack &k, int i)
-// Determine priority of an item by its "density" (value/cost)
-{
-	return (float)k.getValue(i) / (float)k.getCost(i);
-}
-
-int partition(knapsack &k, vector<int> &items, int left, int right, int pivot)
-// Put every item with a higher priority than the pivot to the left
-// Put every item with a lower priority than the pivot to the right
-{
-	for (int i = left; i < right; i++)
-	{
-		if (getPriority(k, items[i]) >= getPriority(k, pivot))
-		{
-			swap(items[i], items[left]);
-			left++;
-		}
-	}
-	return left - 1;
-}
-
-void quicksortKnapsack(knapsack &k, vector<int> &items, int left, int right)
-// Sorting items from highest to lowest priority using partition
-{
-	//partition(k, 0, k.getNumObjects() - 1, items);
-	if (left >= right)
-		return;
-
-	int middle = left + (right - left) / 2;
-	swap(items[middle], items[left]);
-	int midpoint = partition(k, items, left + 1, right, items[left]);
-	swap(items[left], items[midpoint]);
-	quicksortKnapsack(k, items, left, midpoint);
-	quicksortKnapsack(k, items, midpoint + 1, right);
-}
-
 void greedyKnapsack(knapsack &k)
 // Greedy algorithm to solve knapsack problem by grabbing highest priority items that will fit
 {
-	int size = k.getNumObjects();
 	int limit = k.getCostLimit();
 	int cost = 0;
 
-	vector<int> items(size, 0);
-	for (int i = 0; i < size; i++)
-		items[i] = i;
-
-	quicksortKnapsack(k, items, 0, items.size());
+	vector<int> items = k.sort();
 	// The first item in this list now contains the item number of the highest priority knapsack item
 
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < k.getNumObjects(); i++)
 	{
 		int item = items[i];
 
