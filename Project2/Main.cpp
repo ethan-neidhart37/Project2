@@ -16,7 +16,7 @@ int main() {
 	{
 		do
 		{
-			std::cout << "[1] knapsack \n[2] graph coloring \n[3] quit";
+			std::cout << "[1] knapsack \n[2] graph coloring \n[3] quit\n";
 			std::cout << "Select which project problem to run: ";
 			std::cin >> num;
 
